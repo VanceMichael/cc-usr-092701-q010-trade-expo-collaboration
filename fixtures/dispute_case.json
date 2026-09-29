@@ -1,0 +1,105 @@
+{
+  "domain": "cross-border-digital-order-dispute",
+  "version": 1,
+  "sample_id": "dispute-001",
+  "description": "演示用虚构案件：采购方智能助手自动下单，电子签名平台签署，另一家跨境结算机构付款，后就合同是否成立与数据出境产生争议。",
+  "rule_version": "2026.09",
+  "actors": [
+    "采购方（杭州云舶跨境电商有限公司，中国）",
+    "参展企业（Lumina Digital Pte. Ltd.，新加坡）",
+    "采购方智能助手（自动下单代理）",
+    "电子签名平台（签鉴通）",
+    "跨境结算机构（星桥支付，新加坡）",
+    "国际商事调解团队",
+    "平台运营者（数贸会交易平台）"
+  ],
+  "events": [
+    {
+      "type": "order",
+      "source": "数贸会交易平台订单服务",
+      "order_ref": "PO-20260910-7781",
+      "ordered_at": "2026-09-10",
+      "amount": 3280.0,
+      "currency": "CNY",
+      "actor_party": "杭州云舶跨境电商有限公司",
+      "placed_by_agent": "云舶采购智能助手 v3",
+      "goods": "智能展陈控制器 20 台",
+      "merchant_party": "Lumina Digital Pte. Ltd."
+    },
+    {
+      "type": "agency",
+      "source": "采购方代理管理后台",
+      "order_ref": "PO-20260910-7781",
+      "principal": "杭州云舶跨境电商有限公司",
+      "agent": "云舶采购智能助手 v3",
+      "scope": ["自动下单", "订单确认"],
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    {
+      "type": "signature",
+      "source": "签鉴通电子签名平台",
+      "order_ref": "PO-20260910-7781",
+      "signed_doc_ref": "CTR-PO-20260910-7781",
+      "signer_party": "杭州云舶跨境电商有限公司",
+      "signed_at": "2026-09-10",
+      "digest": "9f2c41a87be6d3f0a51c7e94b2d80f613a27c9e054d1b8f3a6c0e2749d1b8f30",
+      "contract_amount": 3280.0,
+      "matches_order": true
+    },
+    {
+      "type": "consent",
+      "source": "采购方隐私授权中心",
+      "order_ref": "PO-20260910-7781",
+      "granting_party": "杭州云舶跨境电商有限公司",
+      "data_categories": ["交易信息", "支付信息", "合同信息", "身份信息"],
+      "destinations": ["新加坡国际商事调解中心", "星桥支付（新加坡）"],
+      "granted_at": "2026-09-10",
+      "valid_from": "2026-09-10",
+      "valid_to": "2027-09-09",
+      "allow_mediator_view": true
+    },
+    {
+      "type": "payment",
+      "source": "星桥支付（新加坡）跨境结算机构",
+      "order_ref": "PO-20260910-7781",
+      "payment_ref": "PAY-XB-559012",
+      "payer_party": "杭州云舶跨境电商有限公司",
+      "payee_party": "Lumina Digital Pte. Ltd.",
+      "amount": 3280.0,
+      "currency": "CNY",
+      "recorded_at": "2026-09-11",
+      "settlements": [
+        {"settler": "星桥支付（新加坡）", "amount": 3000.0},
+        {"settler": "星桥支付（新加坡）备付金账户", "amount": 280.0}
+      ]
+    },
+    {
+      "type": "jurisdiction",
+      "source": "数贸会交易平台合同模板库",
+      "order_ref": "PO-20260910-7781",
+      "clause_ref": "JC-2026-PLATFORM-07",
+      "forum": "新加坡国际商事调解中心先行调解；不成的提交杭州国际商事法庭",
+      "governing_law": "中华人民共和国法律（数据事项同时适用各自法域强制性规定）",
+      "agreed_at": "2026-09-10"
+    },
+    {
+      "type": "statement",
+      "source": "采购方在线陈述表单",
+      "order_ref": "PO-20260910-7781",
+      "speaker_party": "杭州云舶跨境电商有限公司",
+      "matter": "合同成立",
+      "content": "智能助手下单已超出我方当周预算，且签署页面未二次确认，主张合同未成立。",
+      "stated_at": "2026-09-15"
+    },
+    {
+      "type": "statement",
+      "source": "参展企业争议响应端口",
+      "order_ref": "PO-20260910-7781",
+      "speaker_party": "Lumina Digital Pte. Ltd.",
+      "matter": "合同成立",
+      "content": "订单经有效代理自动提交，电子合同已签署，款项次日到账，合同成立并应继续履行。",
+      "stated_at": "2026-09-16"
+    }
+  ]
+}

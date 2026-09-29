@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "跨境数字订单争议归档事件信封",
+  "description": "提交给争议归档与分流服务的单条事件；案件按首次订单事件适用的规则版本归档。",
+  "type": "object",
+  "required": ["type", "source"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "order",
+        "agency",
+        "signature",
+        "consent",
+        "payment",
+        "jurisdiction",
+        "statement",
+        "supplement",
+        "fact"
+      ]
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "description": "事件来源系统或机构，如跨境结算机构、电子签名平台"
+    },
+    "order_ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "非订单事件用它定位所属案件"
+    },
+    "ordered_at": {"type": "string", "format": "date"},
+    "recorded_at": {"type": "string", "format": "date"},
+    "signed_at": {"type": "string", "format": "date"},
+    "stated_at": {"type": "string", "format": "date"},
+    "agreed_at": {"type": "string", "format": "date"},
+    "granted_at": {"type": "string", "format": "date"},
+    "valid_from": {"type": "string", "format": "date"},
+    "valid_to": {"type": "string", "format": "date"},
+    "effective_at": {"type": "string", "format": "date"}
+  },
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {"properties": {"type": {"const": "order"}}},
+      "then": {
+        "required": ["order_ref", "ordered_at", "amount", "currency", "actor_party"],
+        "properties": {
+          "amount": {"type": "number", "exclusiveMinimum": 0},
+          "currency": {"type": "string", "minLength": 3}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "agency"}}},
+      "then": {
+        "required": ["principal", "agent", "scope", "valid_from", "valid_to"],
+        "properties": {
+          "scope": {
+            "oneOf": [
+              {"type": "string", "minLength": 1},
+              {"type": "array", "items": {"type": "string"}, "minItems": 1}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "signature"}}},
+      "then": {
+        "required": ["signed_doc_ref", "signer_party", "signed_at", "digest"],
+        "properties": {
+          "digest": {"type": "string", "minLength": 8},
+          "contract_amount": {"type": "number"},
+          "preauthorization_ref": {"type": "string"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "consent"}}},
+      "then": {
+        "required": ["granting_party", "data_categories", "destinations", "granted_at"],
+        "properties": {
+          "data_categories": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "destinations": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "allow_mediator_view": {"type": "boolean"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "payment"}}},
+      "then": {
+        "required": ["payment_ref", "payer_party", "payee_party", "amount", "currency", "recorded_at"],
+        "properties": {
+          "settlements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["settler", "amount"],
+              "properties": {"settler": {"type": "string"}, "amount": {"type": "number"}}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "jurisdiction"}}},
+      "then": {"required": ["clause_ref", "forum", "governing_law", "agreed_at"]}
+    },
+    {
+      "if": {"properties": {"type": {"const": "statement"}}},
+      "then": {
+        "required": ["speaker_party", "content", "stated_at"],
+        "properties": {"matter": {"type": "string"}}
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "supplement"}}},
+      "then": {
+        "required": ["parties", "matters", "effective_at", "changes"],
+        "properties": {
+          "parties": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "matters": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "changes": {"type": "object", "minProperties": 1}
+        }
+      }
+    }
+  ]
+}
