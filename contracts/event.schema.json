@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "跨境数字订单争议入站事件",
+  "type": "object",
+  "required": ["event_id", "event_type", "timestamp", "payload"],
+  "properties": {
+    "event_id": { "type": "string", "minLength": 1 },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "order_event",
+        "agent_authorization",
+        "signature_evidence",
+        "data_consent",
+        "payment_record",
+        "jurisdiction_agreement",
+        "party_statement",
+        "operator_fact",
+        "supplemental_agreement"
+      ]
+    },
+    "timestamp": { "type": "string", "minLength": 1 },
+    "payload": {
+      "type": "object",
+      "required": ["order_id"],
+      "properties": {
+        "order_id": { "type": "string", "minLength": 1 },
+        "occurred_at": { "type": "string" },
+        "buyer": { "type": "string" },
+        "seller": { "type": "string" },
+        "amount": { "type": "number", "exclusiveMinimum": 0 },
+        "currency": { "type": "string" },
+        "status": { "type": "string" },
+        "doc_ref": { "type": "string" },
+        "signer": { "type": "string" },
+        "method": { "type": "string" },
+        "institution": { "type": "string" },
+        "forum": { "type": "string" },
+        "governing_law": { "type": "string" },
+        "party": { "type": "string" },
+        "text": { "type": "string" },
+        "grantor": { "type": "string" },
+        "agent": { "type": "string" },
+        "scope": { "type": "array", "items": { "type": "string" } },
+        "valid_from": { "type": "string" },
+        "valid_to": { "type": "string" },
+        "consent_id": { "type": "string" },
+        "subject": { "type": "string" },
+        "purposes": { "type": "array", "items": { "type": "string" } },
+        "destinations": { "type": "array", "items": { "type": "string" } },
+        "scopes": { "type": "array", "items": { "type": "string" } },
+        "granted": { "type": "boolean" },
+        "changes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["matter"],
+            "properties": {
+              "matter": { "type": "string", "minLength": 1 },
+              "content": { "type": "string" },
+              "evidence_refs": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

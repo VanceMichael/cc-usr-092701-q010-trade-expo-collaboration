@@ -1,0 +1,188 @@
+{
+  "description": "虚构演示数据：跨境数字订单争议事件流（两个订单）",
+  "cases": [
+    {
+      "name": "正常分流：智能助手代下单、电子签名、跨境结算一致",
+      "order_id": "ORD-2025-0912",
+      "events": [
+        {
+          "event_id": "evt-ord-0912",
+          "event_type": "order_event",
+          "timestamp": "2025-09-12T08:00:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0912",
+            "occurred_at": "2025-09-12T07:58:00Z",
+            "buyer": "杭州云采科技有限公司",
+            "seller": "新加坡星展数字供应私人有限公司",
+            "amount": 860.0,
+            "currency": "USD",
+            "item": "数字展商内容授权包（一年期）",
+            "placed_by_agent": "采购智能助手 v3"
+          }
+        },
+        {
+          "event_id": "evt-auth-0912",
+          "event_type": "agent_authorization",
+          "timestamp": "2025-09-12T08:00:05Z",
+          "payload": {
+            "order_id": "ORD-2025-0912",
+            "grantor": "杭州云采科技有限公司",
+            "agent": "采购智能助手 v3",
+            "scope": ["digital-goods:order", "digital-goods:pay-within-limit:10000USD"],
+            "valid_from": "2025-09-01T00:00:00Z",
+            "valid_to": "2025-10-01T00:00:00Z"
+          }
+        },
+        {
+          "event_id": "evt-sig-0912",
+          "event_type": "signature_evidence",
+          "timestamp": "2025-09-12T08:01:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0912",
+            "doc_ref": "contract-ORD-2025-0912",
+            "signer": "新加坡星展数字供应私人有限公司",
+            "method": "可靠电子签名（证书链+签署设备留痕）",
+            "status": "valid",
+            "signed_at": "2025-09-12T08:00:40Z"
+          }
+        },
+        {
+          "event_id": "evt-consent-0912",
+          "event_type": "data_consent",
+          "timestamp": "2025-09-12T08:01:10Z",
+          "payload": {
+            "order_id": "ORD-2025-0912",
+            "consent_id": "CON-0912",
+            "subject": "杭州云采科技有限公司（联系人：周某）",
+            "purposes": ["争议调解", "跨境支付核验"],
+            "destinations": ["SG-Mediation-Centre"],
+            "scopes": ["payment", "signature", "agent_auth"],
+            "granted": true,
+            "granted_at": "2025-09-12T08:01:09Z"
+          }
+        },
+        {
+          "event_id": "evt-pay-0912",
+          "event_type": "payment_record",
+          "timestamp": "2025-09-12T08:02:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0912",
+            "institution": "杭州跨境结算有限公司",
+            "status": "paid",
+            "amount": 860.0,
+            "currency": "USD",
+            "paid_at": "2025-09-12T08:01:50Z"
+          }
+        },
+        {
+          "event_id": "evt-jur-0912",
+          "event_type": "jurisdiction_agreement",
+          "timestamp": "2025-09-12T08:02:10Z",
+          "payload": {
+            "order_id": "ORD-2025-0912",
+            "forum": "杭州国际商事调解中心",
+            "governing_law": "中华人民共和国法律（不涉冲突规范）"
+          }
+        },
+        {
+          "event_id": "evt-stmt-0912",
+          "event_type": "party_statement",
+          "timestamp": "2025-09-13T02:00:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0912",
+            "party": "杭州云采科技有限公司",
+            "text": "我方智能助手在授权额度内下单并已付款，但对方称未收到款项，请求确认合同成立并交付授权包。"
+          }
+        },
+        {
+          "event_id": "evt-fact-0912",
+          "event_type": "operator_fact",
+          "timestamp": "2025-09-13T02:05:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0912",
+            "text": "平台日志显示订单于 07:58:00Z 推送至卖方开放接口，接口返回 ACK；卖方店铺当日在线。"
+          }
+        }
+      ]
+    },
+    {
+      "name": "冻结分流：签名互斥且两家结算机构流水冲突",
+      "order_id": "ORD-2025-0913",
+      "events": [
+        {
+          "event_id": "evt-ord-0913",
+          "event_type": "order_event",
+          "timestamp": "2025-09-13T09:00:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0913",
+            "occurred_at": "2025-09-13T08:55:00Z",
+            "buyer": "宁波海购贸易有限公司",
+            "seller": "德国莱茵数据服务股份公司",
+            "amount": 1320.0,
+            "currency": "EUR",
+            "item": "展会数据看板 SaaS（季度）",
+            "placed_by_agent": "采购智能助手 v3"
+          }
+        },
+        {
+          "event_id": "evt-sig-0913-a",
+          "event_type": "signature_evidence",
+          "timestamp": "2025-09-13T09:01:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0913",
+            "doc_ref": "contract-ORD-2025-0913",
+            "signer": "德国莱茵数据服务股份公司",
+            "method": "可靠电子签名（证书链）",
+            "status": "valid"
+          }
+        },
+        {
+          "event_id": "evt-sig-0913-b",
+          "event_type": "signature_evidence",
+          "timestamp": "2025-09-13T10:20:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0913",
+            "doc_ref": "contract-ORD-2025-0913",
+            "signer": "德国莱茵数据服务股份公司",
+            "method": "供应商回传签名复核报告",
+            "status": "mismatch"
+          }
+        },
+        {
+          "event_id": "evt-pay-0913-a",
+          "event_type": "payment_record",
+          "timestamp": "2025-09-13T09:02:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0913",
+            "institution": "宁波跨境清算中心",
+            "status": "paid",
+            "amount": 1320.0,
+            "currency": "EUR"
+          }
+        },
+        {
+          "event_id": "evt-pay-0913-b",
+          "event_type": "payment_record",
+          "timestamp": "2025-09-13T11:00:00Z",
+          "payload": {
+            "order_id": "ORD-2025-0913",
+            "institution": "法兰克福结算银行",
+            "status": "failed",
+            "amount": 1320.0,
+            "currency": "EUR"
+          }
+        },
+        {
+          "event_id": "evt-jur-0913",
+          "event_type": "jurisdiction_agreement",
+          "timestamp": "2025-09-13T09:02:30Z",
+          "payload": {
+            "order_id": "ORD-2025-0913",
+            "forum": "杭州国际商事调解中心",
+            "governing_law": "中华人民共和国法律"
+          }
+        }
+      ]
+    }
+  ]
+}
